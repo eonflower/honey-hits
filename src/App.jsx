@@ -1,18 +1,21 @@
 import { useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { Route, Routes, redirect} from 'react-router-dom';
+import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import './App.css'
-import Login from './pages/Login';
-import RecentlyPlayed from './pages/RecentlyPlayed';
-import TopArtists from './pages/TopArtists';
-import TopSongs from './pages/TopSongs';
+
 import config from "./utils/config"
 import { reducerCases } from './utils/Constants';
 import { useStateProvider } from './utils/StateProvider';
 
-function App() {
+import Login from './pages/Login';
+import RecentlyPlayed from './pages/RecentlyPlayed';
+import TopArtists from './pages/TopArtists';
+import TopSongs from './pages/TopSongs';
 
-  const [accessToken, setAccessToken] = useState()
+function App() {
   const [{ token }, dispatch] = useStateProvider()
+  
 
   useEffect(() => {
    const hash = window.location.hash;
@@ -22,15 +25,20 @@ function App() {
    }
   }, [token, dispatch])
 
-  return (
+  return  !token ? (
+    <Login />
+  ) : (
     <div className="app">
-      {/* {token ? <PageView /> : <Login />} */}
+      {/* <Provider>
+      <ConnectedRouter history={history}> */}
       <Routes>
-        <Route path="/login" element={<Login />} />
+        {/* <Route path="/login" element={<Login />} /> */}
         <Route path="/" element={<RecentlyPlayed />} />
         <Route path="/artists" element={<TopArtists />} />
         <Route path="/songs" element={<TopSongs />} />
       </Routes>
+      {/* </ConnectedRouter>
+      </Provider> */}
     </div>
   )
 }
