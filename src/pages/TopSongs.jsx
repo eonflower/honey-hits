@@ -7,10 +7,13 @@ import config from "../utils/config";
 import Nav from "../components/Nav";
 import Header from "../components/Header";
 import peach from "../assets/peach.svg"
+import TimeTabs from "../components/TimeTabs";
+import msToMin from "../components/msToMin";
 
 
 export default function TopSongs() {
     const [{ token, songListItem }, dispatch] = useStateProvider();
+    const [timeRange, setTimeRange] = useState()
     const [data, setData] = useState()
     const background = 
         `background-image: radial-gradient(circle at top, white, rgb(222, 222, 222));
@@ -32,8 +35,8 @@ export default function TopSongs() {
     
                 const {items} = response.data;
                 
-                const songs = items.map(({name, id, artists, album}) => {
-                    return {name, id, artists, album};
+                const songs = items.map(({name, duration_ms, uri, id, artists, album}) => {
+                    return {name, duration_ms, uri, id, artists, album};
                 })
                 
     
@@ -57,10 +60,12 @@ export default function TopSongs() {
                 headerImg={peach}
                 title="top songs"
                 />
+                <TimeTabs />
                 <ol>
                 {data && data.map(song => {
                 
                     return <>
+                    <a href={song.uri}>
                     <li className="song-list" key={song.id}>
                         <span className="song-info">
                             <span className="song-flex">
@@ -72,8 +77,10 @@ export default function TopSongs() {
                                 <p className="song-artist">{_.get(song, ['artists', 0, 'name'])}</p>
                                 </span>
                             </span>
-                        </span>
+                            <h4 className="song-timing">{msToMin(song.duration_ms)}</h4>
+                            </span>
                         </li>
+                    </a>
                         <hr /></>
                 })}
                 </ol>

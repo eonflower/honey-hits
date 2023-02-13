@@ -7,6 +7,8 @@ import config from "../utils/config";
 import { useStateProvider } from "../utils/StateProvider";
 import { reducerCases } from "../utils/Constants";
 import pink from "../assets/pink.svg"
+import TimeTabs from "../components/TimeTabs";
+import msToMin from "../components/msToMin";
 
 
 export default function RecentlyPlayed() {
@@ -33,8 +35,8 @@ export default function RecentlyPlayed() {
 
             const {items} = response.data;
             
-            const liked = items.map(({track, name, id, artists, album}) => {
-                return {track, name, id, artists, album};
+            const liked = items.map(({track, duration_ms, uri, name, id, artists, album}) => {
+                return {track, duration_ms, uri, name, id, artists, album};
             })
             
 
@@ -57,9 +59,11 @@ export default function RecentlyPlayed() {
                 headerImg={pink}
                 title="recently liked songs"
                 />
+                <TimeTabs />
                 <ol>
                 {data && data.map(liked => {
                     return <>
+                    <a href={liked.track.uri}>
                     <li className="liked-list" key={liked.id}>
                         <span className="liked-info">
                             <span className="liked-flex">
@@ -71,8 +75,10 @@ export default function RecentlyPlayed() {
                                 <p className="liked-artist">{_.get(liked, ['track', 'artists', 0, 'name'])}</p>
                                 </span>
                             </span>
+                            <h4 className="song-timing">{msToMin(liked.track.duration_ms)}</h4>
                         </span>
                         </li>
+                    </a>
                         <hr /></>
                 })}
                 </ol>

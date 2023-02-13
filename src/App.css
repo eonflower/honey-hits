@@ -160,16 +160,31 @@ body {
 /* Top Artists */
 
 ol {
-    margin-left: 1rem;
-    list-style: number;
-    padding: 1rem;
+    margin-top: 0;
+    padding: 0 2rem;
+}
+
+a {
+    text-decoration:  none;
+    color: black;
+}
+
+a:hover li {
+    background-color: #ededed;
 }
 
 li {
+    list-style: none;
+    justify-content: space-between;
+    
+}
+
+
+.song-info, .liked-info {
     display: flex;
     justify-content: space-between;
-    padding: 1rem 0;
 }
+
 
 .artist-img, .song-img, .liked-img {
     height: 80px;
@@ -201,6 +216,9 @@ hr {
 
 
 @media screen and (max-width: 550px) {
+    .page-title {
+        left: 3rem;
+    }
     .nav-container {
         height: 80px;
     }
@@ -234,6 +252,9 @@ hr {
 }
 
 @media screen and (max-width: 420px) {
+    .page-title {
+        left: 1.8rem;
+    }
     .logo-big {
         height: 200px; 
     }
@@ -261,4 +282,33 @@ hr {
         left: 16rem;
     }
     
+}
+
+
+.timeTabs {
+    display: flex;
+    justify-content: end;
+    padding: 1rem;
+    gap: 1rem;
+    
+}
+
+.tab {
+    margin: 0;
+    padding: .2rem 1rem;
+    margin: 1rem 0;
+    font-weight: 500;
+
+    transition: all ease .3s;
+}
+
+.tab:hover {
+    background-color: #ffb9ae;
+}
+
+.song-timing {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    color: #747474;
 }

@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import yellow from "../assets/yellow.svg"
 import { useStateProvider } from "../utils/StateProvider";
 import { reducerCases } from "../utils/Constants";
+import TimeTabs from "../components/TimeTabs";
 
 export default function TopArtists() {
     const [{ token, artistListItem }, dispatch] = useStateProvider();
@@ -30,8 +31,8 @@ export default function TopArtists() {
 
             const {items} = response.data;
             
-            const artists = items.map(({name, id, genres, images}) => {
-                return {name, id, genres, images};
+            const artists = items.map(({name, uri, id, genres, images}) => {
+                return {name, uri, id, genres, images};
             })
             
 
@@ -54,9 +55,11 @@ export default function TopArtists() {
                 headerImg={yellow}
                 title="top artists"
                 />
+                <TimeTabs />
                 <ol>
                 {data && data.map(artist => {
                     return <>
+                    <a href={artist.uri}>
                     <li className="artist-list" key={artist.id}>
                         <span className="artist-info">
                             <span className="artist-flex">
@@ -71,6 +74,7 @@ export default function TopArtists() {
                             </span>
                         </span>
                         </li>
+                    </a>
                         <hr /></>
                 })}
                 </ol>
