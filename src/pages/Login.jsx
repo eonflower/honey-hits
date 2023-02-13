@@ -2,6 +2,8 @@ import React, {useState} from "react";
 import { Button, Modal } from "react-bootstrap";
 import logoBig from "../assets/honey-big.png"
 import config from "../utils/config";
+import InfoModal from "../components/InfoModal";
+
 
 export default function Login(props) {
     const [show, setShow] = useState(false);
@@ -38,31 +40,12 @@ export default function Login(props) {
             <img className="logo-big" src={logoBig} alt="honey hits logo"  />
             <span className="button-span">
             <Button onClick={handleClick} className="login-button">Connect Spotify</Button>
-            <a className="info-link" onClick={handleShow}>What's Honey Hits?</a>
+            {/* <a className="info-link" onClick={handleShow}>What's Honey Hits?</a> */}
             </span>
 
             
-
-        <Modal 
-            {...props}
-            show={show} 
-            onHide={show}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-            >
-        <div className='app-info'>
-        <h2>What's Honey Hits?</h2>
-        <p>Honey Hits is the place you go to see all your sweetest jams! You'll find all your top favourite artists, tracks, and most recently liked songs on Spotify.</p>
-        <br />
-        <h2>Do I have to have a Spotify to use this?</h2>
-        <p>Yes. This site was created using Spotify Web API. It requires you to login to utilize.</p>
-        <br />
-        <h2>What about my personal information?</h2>
-        <p>None of your information will be stored to any server. All of the information gathered is essentially just plugged in from your personalized Spotify data.</p>
-        <a className="login-link" onClick={handleShow}>close</a>
-    </div>
-        </Modal>
+{/* 
+        <InfoModal /> */}
         </div>
     )
 }

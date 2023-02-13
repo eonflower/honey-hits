@@ -81,6 +81,11 @@ body {
     border: 0
 }
 
+.modal {
+    margin-bottom: 8rem;;
+    overflow: scroll;
+}
+
 
 
 /* Nav Bar */
@@ -282,6 +287,15 @@ hr {
     .nav-icon {
         padding-top: .8rem;
     }
+    .app-info {
+        padding: 1rem;
+    }
+    .info.q {
+        font-size: .8rem;
+    }
+    .info-a {
+        font-size: .6rem;
+    }
     .artists-button, .songs-button, .recent-button {
         height: 55px;
         width: 55px;
@@ -311,6 +325,15 @@ hr {
     }
     .logo-big {
         height: 200px; 
+    }
+    .app-info {
+        padding: .7rem;
+    }
+    .info.q {
+        font-size: .7rem;
+    }
+    .info-a {
+        font-size: .5rem;
     }
     .artist-img, .song-img, .liked-img {
         height: 60px;
