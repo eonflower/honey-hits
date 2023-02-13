@@ -35,6 +35,7 @@ export default function Login() {
             <img className="logo-big" src={logoBig} alt="honey hits logo"  />
             <span className="button-span">
             <Button onClick={handleClick} className="login-button">Connect Spotify</Button>
+            <a className="info-link" href="/info">What's Honey Hits?</a>
             </span>
         </div>
     )
