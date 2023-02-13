@@ -223,6 +223,9 @@ hr {
 
 
 @media screen and (max-width: 550px) {
+    ol {
+        padding: 0 1.5rem;
+    }
     .page-title {
         left: 3rem;
     }
@@ -260,6 +263,9 @@ hr {
 }
 
 @media screen and (max-width: 420px) {
+    ol {
+        padding: 0 1rem;
+    }
     .page-title {
         left: 1.8rem;
     }
