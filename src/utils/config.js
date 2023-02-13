@@ -9,7 +9,7 @@ const config = {
         "user-library-read",
     ],
     // CALLBACK_URL: `http://localhost:5173/`
-    CALLBACK_URL: `honey-hits.netlify.app`
+    CALLBACK_URL: `${window.location.origin}`
 }
 
 export default config;
