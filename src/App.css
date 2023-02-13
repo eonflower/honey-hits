@@ -200,3 +200,65 @@ hr {
 }
 
 
+@media screen and (max-width: 550px) {
+    .nav-container {
+        height: 80px;
+    }
+    .logo-small {
+        height: 60px;
+        top: .6rem;
+    }
+    .logo-big {
+        height: 220px; 
+    }
+    .nav-icon {
+        padding-top: .8rem;
+    }
+    .artists-button, .songs-button, .recent-button {
+        height: 55px;
+        width: 55px;
+        bottom: 2.1rem;
+        left: 1.5rem;
+        font-size: .7rem;
+    }
+    .artist-img, .song-img, .liked-img {
+        height: 70px;
+    }
+    .artist-name, .song-name, .liked-name {
+        font-size: 1rem;
+    }
+    .artist-genre, .song-artist, .liked-artist {
+        font-size: .8rem;
+    }
+    
+}
+
+@media screen and (max-width: 420px) {
+    .logo-big {
+        height: 200px; 
+    }
+    .artist-img, .song-img, .liked-img {
+        height: 60px;
+    }
+    .artist-name, .song-name, .liked-name {
+        font-size: .9rem;
+    }
+    .artist-genre, .song-artist, .liked-artist {
+        font-size: .7rem;
+    }
+    .nav-slideout:hover .recent-button {
+        opacity: 1.0;
+        left: 6rem;
+    }
+    
+    .nav-slideout:hover .artists-button {
+        opacity: 1.0;
+        left: 11rem;
+    }
+    
+    .nav-slideout:hover .songs-button {
+        opacity: 1.0;
+        left: 16rem;
+    }
+    
+}
