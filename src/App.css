@@ -185,6 +185,13 @@ li {
     justify-content: space-between;
 }
 
+.song-timing {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    color: #747474;
+}
+
 
 .artist-img, .song-img, .liked-img {
     height: 80px;
@@ -245,9 +252,10 @@ hr {
     .artist-name, .song-name, .liked-name {
         font-size: 1rem;
     }
-    .artist-genre, .song-artist, .liked-artist {
+    .artist-genre, .song-artist, .liked-artist, .song-timing {
         font-size: .8rem;
     }
+    
     
 }
 
@@ -266,6 +274,9 @@ hr {
     }
     .artist-genre, .song-artist, .liked-artist {
         font-size: .7rem;
+    }
+    .song-timing {
+        font-size: .6rem;
     }
     .nav-slideout:hover .recent-button {
         opacity: 1.0;
@@ -306,9 +317,3 @@ hr {
     background-color: #ffb9ae;
 }
 
-.song-timing {
-    display: flex;
-    align-items: center;
-    font-weight: 500;
-    color: #747474;
-}
