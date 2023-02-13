@@ -1,9 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+/* font-family: 'Open Sans', sans-serif; */
+
 
 body {
     background-image: radial-gradient(circle at top, white, rgb(222, 222, 222));
     background-repeat: no-repeat;
     background-attachment: fixed;
     margin: 0;
+    font-family: 'Open Sans', sans-serif;
 }
 
 /* Login Page */
@@ -48,6 +53,7 @@ body {
     right: 0;
     bottom: 0;
     background-color: rgb(234, 234, 234);
+    box-shadow: 0px -1px 3px rgb(218, 218, 218);
 }
 
 .logo-small {
@@ -122,9 +128,75 @@ body {
 
 .page-container {
     text-align: center;
-    max-width: 800px;
+    max-width: 1200px;
+    width: 90%;
     margin: auto;
-    height: 100vh;
+    height: 100%;
     background-color: #f6f6f6;
     box-shadow: 0px 2px 3px rgb(191, 191, 191);
+    padding-bottom: 6rem;
 }
+
+.header-container {
+    position: relative;
+}
+
+.page-title {
+    position: absolute;
+    bottom: .8rem;
+    left: 3.5rem;
+    color: #f6f6f6;
+    letter-spacing: 2px;
+    font-weight: 500;
+    text-shadow: 1px 2px 3px rgb(55, 0, 24);
+}
+
+.header-img {
+    height: 220px;
+    background-size: cover;
+    box-shadow: 0 1px 3px grey;
+}
+
+/* Top Artists */
+
+ol {
+    margin-left: 1rem;
+    list-style: number;
+    padding: 1rem;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+}
+
+.artist-img, .song-img, .liked-img {
+    height: 80px;
+}
+
+.artist-name, .song-name, .liked-name {
+    text-align: left;
+    font-size: 1.3rem;
+    margin: 0;
+}
+
+.artist-genre, .song-artist, .liked-artist {
+    margin: 0;
+    text-align: left;
+    font-size: .8rem;
+}
+
+.artist-flex, .song-flex, .liked-flex {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+
+hr {
+    border: none;
+    border-bottom: 1px solid rgb(216, 216, 216);
+}
+
+
