@@ -8,7 +8,8 @@ const config = {
         "playlist-modify-public",
         "user-library-read",
     ],
-    CALLBACK_URL: `http://localhost:5173/`
+    // CALLBACK_URL: `http://localhost:5173/`
+    CALLBACK_URL: `honey-hits.netlify.app`
 }
 
 export default config;
