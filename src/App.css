@@ -67,12 +67,21 @@ body {
     width: 30%;
     margin: auto;
     margin-top: 3rem;
-    padding: 1rem 1.5rem;
+    padding: 1rem;
     text-align: center;
-    border-radius: 80px;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 2px;
     background-color: #c2aeff;
-    box-shadow: 0 1px 3px rgb(126, 126, 126);
+    box-shadow: 0 2px 3px rgb(67, 67, 67);
 }
+
+.modal-footer, .modal-header, .modal-content {
+    border: 0
+}
+
+
 
 /* Nav Bar */
 

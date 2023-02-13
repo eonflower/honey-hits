@@ -12,7 +12,6 @@ import Login from './pages/Login';
 import LikedSongs from './pages/LikedSongs';
 import TopArtists from './pages/TopArtists';
 import TopSongs from './pages/TopSongs';
-import Info from './pages/Info';
 
 function App() {
   const [{ token }, dispatch] = useStateProvider()
@@ -29,15 +28,8 @@ function App() {
     }
   }, [token, dispatch])
 
-  return !token ? ( 
-    <Routes>
-    <Route path="/" element={<Login />} />
-    <Route path="/login" element={<Login />} />
-    <Route path="/info" element={<Info />} />
-    </Routes>
-    
-  
-  ) :(
+  return !token ? ( <Login />
+    ) :(
     <div className="app">
       {/* <Provider>
       <ConnectedRouter history={history}> */}
