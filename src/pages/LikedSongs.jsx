@@ -87,10 +87,3 @@ export default function RecentlyPlayed() {
         </div>
     )
 }
-
-// const response = await axios.get(`${config.API_URL}/me/tracks?limit=50&offset=0`, {
-//     headers: {
-//         Authorization:`Bearer ${token}`,
-//         "Content-Type": 'application/json',
-//     },
-// }); 
