@@ -101,6 +101,12 @@ body {
     box-shadow: 0px -1px 3px rgb(218, 218, 218);
 }
 
+.logout {
+    right: 1rem;
+    top: .8rem;
+
+}
+
 .logo-small {
     left: 1rem;
     top: .8rem;
@@ -112,6 +118,7 @@ body {
     position: relative;
     height: 100px;
     width: 400px;
+    margin-right: 0;
 }
 
 #slideout {
@@ -224,10 +231,23 @@ li {
     
 }
 
-
-.song-info, .liked-info {
+.time-buttons {
+    padding: .8rem 0 2rem;
     display: flex;
-    justify-content: space-between;
+    margin: auto;
+    width: 300px;
+    justify-content: space-around;
+}
+
+.time {
+    border: none;
+    border-radius: 20px;
+    padding: .2rem .5rem;
+    box-shadow: 0 1px 3px grey;
+}
+
+.liked-list {
+    padding-top:  1rem;
 }
 
 .song-timing {
@@ -237,6 +257,25 @@ li {
     color: #747474;
 }
 
+
+.song-item, .artist-item, .liked-item {
+    display: flex;
+    align-items: center;
+}
+
+.song-number, .artist-number, .liked-number {
+    font-size: 1rem;
+    margin-right: 1rem;
+    font-weight: 500;
+    color: #747474;
+}
+
+.song-info, .liked-info, .artist-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
+}
 
 .artist-img, .song-img, .liked-img {
     height: 80px;
@@ -267,9 +306,9 @@ hr {
 }
 
 
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 650px) {
     ol {
-        padding: 0 1.5rem;
+        padding: 0 1rem;
     }
     .page-title {
         left: 3rem;
@@ -309,7 +348,7 @@ hr {
     .artist-name, .song-name, .liked-name {
         font-size: 1rem;
     }
-    .artist-genre, .song-artist, .liked-artist, .song-timing {
+    .artist-genre, .song-artist, .liked-artist, .song-timing, .song-number, .artist-number, .liked-number {
         font-size: .8rem;
     }
     
@@ -318,10 +357,11 @@ hr {
 
 @media screen and (max-width: 420px) {
     ol {
-        padding: 0 1rem;
+        padding: 0 .5rem;
     }
     .page-title {
         left: 1.8rem;
+        font-size: 1.3rem;
     }
     .logo-big {
         height: 200px; 
@@ -344,7 +384,56 @@ hr {
     .artist-genre, .song-artist, .liked-artist {
         font-size: .7rem;
     }
-    .song-timing {
+    .song-timing, .song-number, .artist-number, .liked-number {
+        font-size: .6rem;
+    }
+    .nav-slideout:hover .recent-button {
+        opacity: 1.0;
+        left: 6rem;
+    }
+    
+    .nav-slideout:hover .artists-button {
+        opacity: 1.0;
+        left: 11rem;
+    }
+    
+    .nav-slideout:hover .songs-button {
+        opacity: 1.0;
+        left: 16rem;
+    }
+    
+}
+
+@media screen and (max-width: 380px) {
+    ol {
+        padding: 0 .5rem;
+    }
+    .page-title {
+        left: 1.8rem;
+        font-size: 1.1rem;
+    }
+    .logo-big {
+        height: 200px; 
+    }
+    .app-info {
+        padding: .7rem;
+    }
+    .info.q {
+        font-size: .7rem;
+    }
+    .info-a {
+        font-size: .5rem;
+    }
+    .artist-img, .song-img, .liked-img {
+        height: 60px;
+    }
+    .artist-name, .song-name, .liked-name {
+        font-size: .7rem;
+    }
+    .artist-genre, .song-artist, .liked-artist {
+        font-size: .6rem;
+    }
+    .song-timing, .song-number, .artist-number, .liked-number {
         font-size: .6rem;
     }
     .nav-slideout:hover .recent-button {

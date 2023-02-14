@@ -7,11 +7,10 @@ import config from "../utils/config";
 import { useStateProvider } from "../utils/StateProvider";
 import { reducerCases } from "../utils/Constants";
 import pink from "../assets/pink.svg"
-import TimeTabs from "../components/TimeTabs";
 import msToMin from "../components/msToMin";
 
 
-export default function RecentlyPlayed() {
+export default function LikedSongs() {
     const background = 
         `background-image: radial-gradient(circle at top, white, rgb(222, 222, 222));
         background-repeat: no-repeat;
@@ -52,19 +51,20 @@ export default function RecentlyPlayed() {
 
 
     return(
-        <div className="likedSongs-wrapper">
+        <div className="likedSongs">
             <Nav />
                 <div className="page-container">
                 <Header 
                 headerImg={pink}
                 title="recently liked songs"
                 />
-                <TimeTabs />
-                <ol>
-                {data && data.map(liked => {
+                <ol className="liked-list">
+                {data && 
+                data.map((liked, index) => {
                     return <>
-                    <a href={liked.track.uri}>
-                    <li className="liked-list" key={liked.id}>
+                    <a href={liked.track.uri}  key={liked.track.id}>
+                    <li className="liked-item" key={liked.track.id}>
+                    <span className="liked-number">{index + 1}</span>
                         <span className="liked-info">
                             <span className="liked-flex">
                                 <span>

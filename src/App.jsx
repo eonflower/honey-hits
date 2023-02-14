@@ -1,65 +1,67 @@
-import { useEffect, useState } from 'react';
-import { Provider } from 'react-redux';
-import { Route, Routes, redirect} from 'react-router-dom';
-// import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
-import './App.css'
+import { useEffect } from 'react';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import './App.css';
 
 import config from "./utils/config"
-import { reducerCases } from './utils/Constants';
 import { useStateProvider } from './utils/StateProvider';
 
 import Login from './pages/Login';
 import LikedSongs from './pages/LikedSongs';
 import TopArtists from './pages/TopArtists';
 import TopSongs from './pages/TopSongs';
+import { reducerCases } from './utils/Constants';
 
 function App() {
-  const [{ token }, dispatch] = useStateProvider()
+  const [{ token, isLoggedIn }, dispatch] = useStateProvider();
   
-
   useEffect(() => {
     const hash = window.location.hash;
-    let token = window.localStorage.getItem("token")
-    window.location.hash = "";
     if (hash) {
-      token = hash.substring(1).split("&")[0].split("=")[1];
-      window.localStorage.setItem("token", token)
-      dispatch({ type: reducerCases.SET_TOKEN, token })
+      const token = hash.split("=")[1];
+      window.localStorage.setItem("token", token);
+      dispatch({ type: reducerCases.SET_TOKEN, token });
+      dispatch({ type: reducerCases.SET_LOGGED_IN, isLoggedIn: true });
+      window.location.hash = '';
+    } else {
+      const storedToken = window.localStorage.getItem("token");
+      if (storedToken) {
+        const expirationTime = window.localStorage.getItem('expirationTime');
+        if (Date.now() >= parseInt(expirationTime)) {
+          window.localStorage.removeItem('token');
+          window.localStorage.removeItem('expirationTime');
+          dispatch({ type: reducerCases.SET_TOKEN, token: null });
+          dispatch({ type: reducerCases.SET_LOGGED_IN, isLoggedIn: false });
+        } else {
+          dispatch({ type: reducerCases.SET_TOKEN, token: storedToken });
+          dispatch({ type: reducerCases.SET_LOGGED_IN, isLoggedIn: true });
+        }
+      }
     }
-  }, [token, dispatch])
+  }, [dispatch]);
+  
+  useEffect(() => {
+    if (token) {
+      window.localStorage.setItem('expirationTime', Date.now() + 3600000);
+    }
+  }, [token]);
+  
 
-  return !token ? ( <Login />
-    ) :(
+  
+  return (
     <div className="app">
-      {/* <Provider>
-      <ConnectedRouter history={history}> */}
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={<LikedSongs/>} />
-        <Route path="/artists" element={<TopArtists />} />
-        <Route path="/songs" element={<TopSongs />} />
-      </Routes>
-      {/* </ConnectedRouter>
-      </Provider> */}
+      {isLoggedIn ? (
+        <Routes>
+          <Route path="/" element={<LikedSongs/>} />
+          <Route path="/artists" element={<TopArtists />} />
+          <Route path="/songs" element={<TopSongs />} />
+          {/* <Route path="/logout" element={<Navigate to="/" />} onClick={logout} /> */}
+          <Route path="/*" element={<Navigate to="/" />} />
+        </Routes>
+      ) : (
+        <Login />
+      )}
     </div>
-  )
+  );
 }
 
-export default App
-
-
-//   useEffect(() => {
-//      // API Access Token
-//  let authParams = {
-//   method: 'POST',
-//   headers: {
-//     'Content-type': "application/x-www-form-urlencoded"
-//   },
-//   body: 'grant_type=client_credentials&client_id=' + config.CLIENT_ID + '&client_secret=' + config.CLIENT_SECRET
-// }
-// fetch("https://accounts.spotify.com/api/token", authParams)
-//   .then(result => result.json())
-//   .then(data => setAccessToken(data.access_token))
-//   })
-
-
+export default App;

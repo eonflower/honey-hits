@@ -22,7 +22,7 @@ export default function Nav() {
                 <FontAwesomeIcon className="nav-icon" icon={faClock} /> 
                 <div>recent</div>
             </Link>
-        </div>
+            </div>
         </div>
     )
 }
