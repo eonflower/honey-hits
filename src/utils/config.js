@@ -1,5 +1,7 @@
+import env from "../../env"
+
 const config = {
-    CLIENT_ID: "1ec94dff818a4e49a79f3b5c48cf5fa7",
+    CLIENT_ID: env.CLIENT_ID,
     API_URL: "https://api.spotify.com/v1",
     AUTH_URL: "https://accounts.spotify.com/authorize",
     AUTH_SCOPES: [
