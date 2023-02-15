@@ -13,7 +13,7 @@ const config = {
     // CALLBACK_URL: `http://localhost:5173/`,
     // LOGIN_URL: `http://localhost:5173/login`,
 
-    CALLBACK_URL: `https://honey-hits.netlify.app/`,
+    CALLBACK_URL: `https://honey-hits.netlify.app`,
     LOGIN_URL: `https://honey-hits.netlify.app/login`,
 };
 
