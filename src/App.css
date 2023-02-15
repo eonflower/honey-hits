@@ -187,6 +187,16 @@ body {
     position: relative;
 }
 
+.page-login-button {
+    position: absolute;
+    top: .2rem;
+    right: 2rem;
+    font-size: .8rem;
+    color: #f6f6f6;
+    font-weight: 500;
+    text-shadow: 1px 2px 3px rgb(55, 0, 24);
+}
+
 .page-title {
     position: absolute;
     bottom: .8rem;
