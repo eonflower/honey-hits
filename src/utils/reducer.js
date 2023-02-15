@@ -5,7 +5,6 @@ export const initialState = {
     topArtists: [],
     topSongs: [],
     likedSongs: [],
-    isLoggedIn: false,
     
 };
 
@@ -31,13 +30,6 @@ const reducer = (state, action) => {
         ...state,
         topSongs: action.topSongs
         };
-    case reducerCases.SET_LOGGED_IN:
-        return {
-        ...state,
-        isLoggedIn: action.isLoggedIn
-        };
-    default:
-        return state;
     }
 };
 
