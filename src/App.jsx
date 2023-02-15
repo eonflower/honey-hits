@@ -49,7 +49,7 @@ function App() {
   
   return (
     <div className="app">
-      {isLoggedIn ? (
+      {!token ? (
         <Routes>
           <Route path="/" element={<LikedSongs/>} />
           <Route path="/artists" element={<TopArtists />} />
