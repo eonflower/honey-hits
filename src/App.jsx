@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 
@@ -12,8 +12,8 @@ import TopSongs from './pages/TopSongs';
 import { reducerCases } from './utils/Constants';
 
 function App() {
-  const [{ token }, dispatch] = useStateProvider();
-  
+  const [{ token }, dispatch] = useStateProvider()
+
   useEffect(() => {
     const hash = window.location.hash;
     if (hash) {
@@ -22,25 +22,13 @@ function App() {
       dispatch({ type: reducerCases.SET_TOKEN, token });
       window.location.hash = '';
     } else {
-      const storedToken = window.localStorage.getItem("token");
-      const expirationTime = window.localStorage.getItem('expirationTime');
-      if (storedToken && expirationTime && Date.now() < parseInt(expirationTime)) {
-        dispatch({ type: reducerCases.SET_TOKEN, token: storedToken });
-      } else {
-        window.localStorage.removeItem('token');
-        window.localStorage.removeItem('expirationTime');
-        dispatch({ type: reducerCases.SET_TOKEN, token: null });
+      const token = window.localStorage.getItem("token");
+      if (token) {
+        dispatch({ type: reducerCases.SET_TOKEN, token });
       }
     }
   }, [dispatch]);
-  
-  useEffect(() => {
-    if (token) {
-      window.localStorage.setItem("token", token);
-      window.localStorage.setItem('expirationTime', Date.now() + 3600000);
-    }
-  }, [token]);
-  
+
   return (
     <div className="app">
       {!token ? <Login /> : (
@@ -48,20 +36,11 @@ function App() {
           <Route path="/" element={<LikedSongs/>} />
           <Route path="/artists" element={<TopArtists />} />
           <Route path="/songs" element={<TopSongs />} />
-          <Route path="/logout" element={<Logout />} />
-          <Route path="/*" element={<Navigate to="/" />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       )}
     </div>
   );
-}
-
-function Logout() {
-  const [, dispatch] = useStateProvider();
-  window.localStorage.removeItem('token');
-  window.localStorage.removeItem('expirationTime');
-  dispatch({ type: reducerCases.SET_TOKEN, token: null });
-  return <Navigate to="/login" />;
 }
 
 export default App;
