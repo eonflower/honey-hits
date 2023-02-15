@@ -12,7 +12,7 @@ import TopSongs from './pages/TopSongs';
 import { reducerCases } from './utils/Constants';
 
 function App() {
-  const [{ token, isLoggedIn }, dispatch] = useStateProvider();
+  const [{ token }, dispatch] = useStateProvider();
   
   useEffect(() => {
     const hash = window.location.hash;
@@ -20,32 +20,26 @@ function App() {
       const token = hash.split("=")[1];
       window.localStorage.setItem("token", token);
       dispatch({ type: reducerCases.SET_TOKEN, token });
-      dispatch({ type: reducerCases.SET_LOGGED_IN, isLoggedIn: true });
       window.location.hash = '';
     } else {
       const storedToken = window.localStorage.getItem("token");
-      if (storedToken) {
-        const expirationTime = window.localStorage.getItem('expirationTime');
-        if (Date.now() >= parseInt(expirationTime)) {
-          window.localStorage.removeItem('token');
-          window.localStorage.removeItem('expirationTime');
-          dispatch({ type: reducerCases.SET_TOKEN, token: null });
-          dispatch({ type: reducerCases.SET_LOGGED_IN, isLoggedIn: false });
-        } else {
-          dispatch({ type: reducerCases.SET_TOKEN, token: storedToken });
-          dispatch({ type: reducerCases.SET_LOGGED_IN, isLoggedIn: true });
-        }
+      const expirationTime = window.localStorage.getItem('expirationTime');
+      if (storedToken && expirationTime && Date.now() < parseInt(expirationTime)) {
+        dispatch({ type: reducerCases.SET_TOKEN, token: storedToken });
+      } else {
+        window.localStorage.removeItem('token');
+        window.localStorage.removeItem('expirationTime');
+        dispatch({ type: reducerCases.SET_TOKEN, token: null });
       }
     }
   }, [dispatch]);
   
   useEffect(() => {
     if (token) {
+      window.localStorage.setItem("token", token);
       window.localStorage.setItem('expirationTime', Date.now() + 3600000);
     }
   }, [token]);
-  
-
   
   return (
     <div className="app">
@@ -54,12 +48,20 @@ function App() {
           <Route path="/" element={<LikedSongs/>} />
           <Route path="/artists" element={<TopArtists />} />
           <Route path="/songs" element={<TopSongs />} />
-          {/* <Route path="/logout" element={<Navigate to="/" />} onClick={logout} /> */}
+          <Route path="/logout" element={<Logout />} />
           <Route path="/*" element={<Navigate to="/" />} />
         </Routes>
       )}
     </div>
   );
+}
+
+function Logout() {
+  const [, dispatch] = useStateProvider();
+  window.localStorage.removeItem('token');
+  window.localStorage.removeItem('expirationTime');
+  dispatch({ type: reducerCases.SET_TOKEN, token: null });
+  return <Navigate to="/login" />;
 }
 
 export default App;
