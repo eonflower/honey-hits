@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function PageContent(props) {
 
@@ -6,7 +7,7 @@ export default function PageContent(props) {
         <div className="header-container">
             <div className="header-img" style={{backgroundImage: `url('${props.headerImg}')`}} />
             <h2 className="page-title">{props.title}</h2>
-            <a className="page-login-button" href="/login">login</a>
+            <Link to="/login" className="page-login-button">login</Link>
         </div>
     )
 }
