@@ -398,19 +398,19 @@ hr {
     .song-timing, .song-number, .artist-number, .liked-number {
         font-size: .6rem;
     }
-    .nav-slideout:hover .recent-button {
+    .recent-button {
         opacity: 1.0;
-        left: 6rem;
+        left: 7rem;
     }
     
-    .nav-slideout:hover .artists-button {
+    .artists-button {
         opacity: 1.0;
-        left: 11rem;
+        left: 13.1rem;
     }
     
-    .nav-slideout:hover .songs-button {
+    .songs-button {
         opacity: 1.0;
-        left: 16rem;
+        left: 19rem;
     }
     
 }
@@ -448,17 +448,17 @@ hr {
     .song-timing, .song-number, .artist-number, .liked-number {
         font-size: .6rem;
     }
-    .nav-slideout:hover .recent-button {
+    .recent-button {
         opacity: 1.0;
         left: 6rem;
     }
     
-    .nav-slideout:hover .artists-button {
+    .artists-button {
         opacity: 1.0;
         left: 11rem;
     }
     
-    .nav-slideout:hover .songs-button {
+    .songs-button {
         opacity: 1.0;
         left: 16rem;
     }
