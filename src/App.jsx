@@ -49,7 +49,7 @@ function App() {
   
   return (
     <div className="app">
-      {!token ? (
+      {!token ? <Login /> : (
         <Routes>
           <Route path="/" element={<LikedSongs/>} />
           <Route path="/artists" element={<TopArtists />} />
@@ -57,8 +57,6 @@ function App() {
           {/* <Route path="/logout" element={<Navigate to="/" />} onClick={logout} /> */}
           <Route path="/*" element={<Navigate to="/" />} />
         </Routes>
-      ) : (
-        <Login />
       )}
     </div>
   );
