@@ -3,6 +3,5 @@ export const reducerCases = {
     SET_TOP_ARTISTS: "SET_TOP_ARTISTS",
     SET_TOP_LIKED: "SET_TOP_LIKED",
     SET_TOP_SONGS: "SET_TOP_SONGS",
-    SET_LOGGED_IN: 'SET_LOGGED_IN',
-    LOGOUT: 'LOGOUT',
+    
 };

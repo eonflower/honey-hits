@@ -4,12 +4,16 @@ import './App.css';
 
 import config from "./utils/config"
 import { useStateProvider } from './utils/StateProvider';
+import { reducerCases } from './utils/Constants';
+import _ from 'lodash';
 
 import Login from './pages/Login';
 import LikedSongs from './pages/LikedSongs';
 import TopArtists from './pages/TopArtists';
 import TopSongs from './pages/TopSongs';
-import { reducerCases } from './utils/Constants';
+
+
+
 
 function App() {
   const [{ token }, dispatch] = useStateProvider();
@@ -25,17 +29,15 @@ function App() {
       const token = window.localStorage.getItem("token");
       if (token) {
         dispatch({ type: reducerCases.SET_TOKEN, token });
+      } else {
+        <Navigate to="/login" />
       }
     }
 
-    const intervalId = setInterval(() => {
-      window.localStorage.removeItem("token");
-      dispatch({ type: reducerCases.SET_TOKEN, token: null });
-      window.location.href = config.LOGIN_URL;
-    }, 60 * 60 * 950); // clear token and redirect to login page ever 57 minutes, so that token does not expire
 
-    return () => clearInterval(intervalId);
   }, [dispatch]);
+
+
 
   return (
     <div className="app">
@@ -52,5 +54,4 @@ function App() {
 }
 
 export default App;
-
 
