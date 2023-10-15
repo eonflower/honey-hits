@@ -1,12 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
+import { StateContext } from "../utils/StateProvider";
 
 export default function PageContent(props) {
 
-    const logout = () => {
-        localStorage.clear();
-        window.location.reload();
-        window.location.href = "/";
-    }
+    const { logout } = useContext(StateContext);
 
     return(
         <div className="header-container">

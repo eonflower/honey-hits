@@ -11,7 +11,7 @@ import msToMin from "../components/msToMin";
 
 
 export default function LikedSongs() {
-    const { isAccessTokenExpired, access_token } = useContext(StateContext);
+    const { access_token } = useContext(StateContext);
 
     // Define state for likedData
     const [likedData, setLikedData] = useState();
@@ -22,17 +22,6 @@ export default function LikedSongs() {
 
     // UseEffect to fetch liked data and set an interval to check token expiration
     useEffect(() => {
-        // Function to check token expiration and refresh if needed
-        const checkTokenExpiration = () => {
-            if (isAccessTokenExpired()) {
-                refreshToken();
-            }
-        }
-
-        // Define the interval to check token expiration every 30 minutes
-        const thirtyMinutes = 1000 * 60 * 30; // 30 minutes in milliseconds
-        const tokenCheckInterval = setInterval(checkTokenExpiration, thirtyMinutes); // Check every 30 minutes
-
         // Function to fetch liked data
         const fetchLikedData = async () => {
             axios.get(`${config.API_URI}/me/tracks?limit=50&offset=0`, {
@@ -50,14 +39,10 @@ export default function LikedSongs() {
                     return {track, duration_ms, uri, name, id, artists, album};
                 });
             });
-            return () => clearInterval(tokenCheckInterval);
         }
 
         // Call the fetchLikedData function
         fetchLikedData();
-
-        // Clean up the interval when the component is unmounted
-        return () => clearInterval(tokenCheckInterval);
     }, []);
 
     return (
@@ -72,9 +57,9 @@ export default function LikedSongs() {
                     {likedData && 
                         likedData?.map((liked, index) => {
                             return (
-                                <>
-                                    <a href={liked.track.uri} key={liked.track.id}>
-                                        <li className="liked-item" key={liked.track.id}>
+                                <React.Fragment key={liked.track.id}>
+                                    <a href={liked.track.uri}>
+                                        <li className="liked-item">
                                             <span className="liked-number">{index + 1}</span>
                                             <span className="liked-info">
                                                 <span className="liked-flex">
@@ -91,7 +76,7 @@ export default function LikedSongs() {
                                         </li>
                                     </a>
                                     <hr />
-                                </>
+                                </React.Fragment>
                             );
                         })
                     }

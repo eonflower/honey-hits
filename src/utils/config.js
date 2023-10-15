@@ -15,11 +15,11 @@ const config = {
         'playlist-modify-public',
         'user-library-read',
     ],
-    // REDIRECT_URI: "http://localhost:5173/",
-    // LOGIN_URI: "https://localhost:5173/login",
+    REDIRECT_URI: "http://localhost:5173/",
+    LOGIN_URI: "https://localhost:5173/login",
     
-    REDIRECT_URI:"https://honey-hits.netlify.app",
-    LOGIN_URI:"https://honey-hits.netlify.app/login"
+    // REDIRECT_URI:"https://honey-hits.netlify.app",
+    // LOGIN_URI:"https://honey-hits.netlify.app/login"
     
 };
 

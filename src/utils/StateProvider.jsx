@@ -1,4 +1,5 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
+import axios from "axios";
 import { Navigate } from "react-router-dom";
 import config from "./config";
 import { generateRandomString } from "../auth/randomString";
@@ -12,69 +13,62 @@ let access_token = localStorage.getItem('access_token') || null;
 let refresh_token = localStorage.getItem('refresh_token') || null;
 let expires_at = localStorage.getItem('expires_at') || null;
 let code = new URLSearchParams(window.location.search).get('code');
+const currentTime = new Date().getTime(); // Current time in seconds
+
+const tokenEvents = [
+    "load",
+    'click',
+    'mousedown',
+    'keypress',
+]
 
 // User authorization functions //
-
-// Is Token Expired Function
-
-const isAccessTokenExpired = () => {
-    const expires_at = localStorage.getItem('expires_at');
-    if (!expires_at) {
-        return true; // Token expiration time not available
-    }
-
-    const currentTime = new Date().getTime() / 1000; // Current time in seconds
-
-    return currentTime >= expires_at;
-}
 
 // Function to get access token from Spotify in exchange for the code
 const exchangeForToken = () => {
     const code_verifier = localStorage.getItem('code_verifier');
 
-    fetch('https://accounts.spotify.com/api/token', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-        },
-        body: new URLSearchParams({
+    axios.post('https://accounts.spotify.com/api/token', 
+        new URLSearchParams({
             client_id: config.CLIENT_ID,
             grant_type: 'authorization_code',
             code,
             redirect_uri: config.REDIRECT_URI,
             code_verifier,
-        }),
+        }), {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            }
+        }
+    )
+    .then((response) => {
+        return response.data;
     })
-    .then(addThrowErrorToFetch)
     .then((data) => {
         processTokenResponse(data);
-        // clear search query params in the url
         window.history.replaceState({}, document.title, '/');
     })
-    .catch(handleError); // Add an error handler here
+    .catch(addThrowErrorToFetch);
 }
 
 // Function to get refresh token from Spotify
 const refreshToken = () => {
-    fetch('https://accounts.spotify.com/api/token', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-        },
-        body: new URLSearchParams({
+    axios.post('https://accounts.spotify.com/api/token',
+        new URLSearchParams({
             client_id: config.CLIENT_ID,
             grant_type: 'refresh_token',
             refresh_token,
-        }),
+        }), {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            }
+        }
+    )
+    .then((response) => {
+        return response.data;
     })
     .then(processTokenResponse)
-    .then(addThrowErrorToFetch)
-    .catch(handleError);
-}
-
-// Function for error handling
-const handleError = (error) => {
-    console.error(error);
+    .catch(addThrowErrorToFetch);
 }
 
 // Function to add error handling to fetch requests
@@ -158,17 +152,13 @@ const getUserAuth = () => {
 
 // Function to get user data from Spotify
 const getUserData = () => {
-    fetch('https://api.spotify.com/v1/me', {
+    axios.get('https://api.spotify.com/v1/me', {
         headers: {
             Authorization: 'Bearer ' + access_token,
         },
     })
-    .then(async (response) => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw await response.json();
-        }
+    .then((response) => {
+        return response.data;
     })
     .then((data) => {
         // console.log(data);
@@ -179,12 +169,22 @@ const getUserData = () => {
 }
 
 
+// Logout functions //
+
+// Function to logout user
+const logout = () => {
+    localStorage.clear();
+    window.location.reload();
+    window.location.href = "/";
+    <Navigate to='/login' />
+}
+
 // Component to provide state to child components
 export const StateProvider = ({children}) => (
     <StateContext.Provider 
     value={{
+        logout,
         getUserAuth,
-        isAccessTokenExpired,
         redirectToSpotifyAuthorizeEndpoint,
         exchangeForToken,
         refreshToken,
@@ -193,6 +193,9 @@ export const StateProvider = ({children}) => (
         refresh_token,
         expires_at,
         code,
+        currentTime,
+        tokenEvents,
+
     }}>
         {children}
     </StateContext.Provider>

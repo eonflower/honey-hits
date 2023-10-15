@@ -1,6 +1,6 @@
-  import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
 
 import { StateContext} from './utils/StateProvider';
@@ -12,23 +12,38 @@ import TopArtists from './pages/TopArtists';
 import TopSongs from './pages/TopSongs';
 
 
-
-
-
-
 function App() {
+  
+  const { tokenEvents, access_token, refreshToken, expires_at } = useContext(StateContext);
+  const [token, setToken] = useState(null);
+  const [time, setTime] = useState(null);
+  const oneMinuteLess = expires_at - 60000;
 
-  const { access_token } = useContext(StateContext);
+  const checkTime = () => {
+      let latestTime = new Date().getTime();
+      setTime(latestTime);
+  };
+  
 
   useEffect(() => {
-    if (access_token) {
-      <Navigate to='/' />; // Redirect to login page if not authenticated
-    }
-  }, []);
+    Object.values(tokenEvents).forEach((item) => {
+      window.addEventListener(item, () => {
+        checkTime();
+        time > oneMinuteLess
+          ? (refreshToken())
+          : setToken(access_token);
+        // console.log(
+        //   "current time: " + time,
+        //   "expires at: " + expires_at,
+        //   "one minute less: " + oneMinuteLess
+        // );
+      });
+    });
+  }, [checkTime]);
 
   return (
     <div className="app">
-      {!access_token ? <Login /> : (
+      {!token ? <Login /> : (
         <Routes>
           <Route path="/" element={<LikedSongs />} />
           <Route path="/artists" element={<TopArtists />} />

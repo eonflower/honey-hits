@@ -7,7 +7,6 @@ import { StateContext } from "../utils/StateProvider";
 
 export default function Login(props) {
     const { redirectToSpotifyAuthorizeEndpoint, exchangeForToken, access_token } = useContext(StateContext);
-    const [code, setCode] = useState();
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
@@ -19,23 +18,17 @@ export default function Login(props) {
     const handleClick = () => {
         // Redirect to Spotify authorization
         redirectToSpotifyAuthorizeEndpoint();
-        const args = new URLSearchParams(window.location.search);
-        const code = args.get('code');
-        if (code) {
-            // we have received the code from Spotify and will exchange it for an access_token
-            exchangeForToken(code);
-        }
-        // No else block here, as it might not be needed.
     }
 
     useEffect(() => {
+        // Check if we have received the code from Spotify
         const args = new URLSearchParams(window.location.search);
         const code = args.get('code');
         if (code) {
             // we have received the code from Spotify and will exchange it for an access_token
             exchangeForToken(code);
         }
-    }, [code]); // Add 'code' as a dependency here
+    }, [handleClick]); // runs when handleClick is called
 
 
     return (

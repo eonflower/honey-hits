@@ -26,17 +26,6 @@ export default function TopSongs() {
 
     // UseEffect to fetch song data and set an interval to check token expiration
     useEffect(() => {
-        // Function to check token expiration and refresh if needed
-        const checkTokenExpiration = () => {
-            if (isAccessTokenExpired()) {
-                refreshToken();
-            }
-        }
-
-        // Define the interval to check token expiration every 30 minutes
-        const thirtyMinutes = 1000 * 60 * 30; // 30 minutes in milliseconds
-        const tokenCheckInterval = setInterval(checkTokenExpiration, thirtyMinutes); // Check every 30 minutes
-
         // Function to fetch song data
         const fetchSongData = async () => {
             axios.get(
@@ -60,8 +49,6 @@ export default function TopSongs() {
         // Call the fetchSongData function
         fetchSongData();
 
-        // Clean up the interval when the component is unmounted or the dependency 'timeFrame' changes
-        return () => clearInterval(tokenCheckInterval);
     }, [timeFrame]);
 
         
@@ -79,8 +66,9 @@ export default function TopSongs() {
                 {songData && songData?.map((song, index) => {
                 
                     return (
-                        <a href={song.uri} key={song.id}>
-                            <li className="song-item" key={song.id}>
+                        <React.Fragment key={song.id}>
+                        <a href={song.uri}>
+                            <li className="song-item">
                                 <span className="song-number">{index + 1}</span>
                                 <span className="song-info">
                                     <span className="song-flex">
@@ -97,6 +85,7 @@ export default function TopSongs() {
                             </li>
                             <hr />
                         </a>
+                    </React.Fragment>
                     );
                 })}
                 </ol>

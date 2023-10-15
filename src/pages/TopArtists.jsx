@@ -21,17 +21,6 @@ export default function TopArtists() {
 
     // UseEffect to fetch artist data and set an interval to check token expiration
     useEffect(() => {
-        // Function to check token expiration and refresh if needed
-        const checkTokenExpiration = () => {
-            if (isAccessTokenExpired()) {
-                refreshToken();
-            }
-        }
-
-        // Define the interval to check token expiration every 30 minutes
-        const thirtyMinutes = 1000 * 60 * 30; // 30 minutes in milliseconds
-        const tokenCheckInterval = setInterval(checkTokenExpiration, thirtyMinutes); // Check every 30 minutes
-
         // Function to fetch artist data
         const fetchArtistData = async () => {
             axios.get(
@@ -57,8 +46,6 @@ export default function TopArtists() {
         // Call the fetchArtistData function
         fetchArtistData();
 
-        // Clean up the interval when the component is unmounted or the dependency 'timeFrame' changes
-        return () => clearInterval(tokenCheckInterval);
     }, [timeFrame]);
 
 
@@ -72,9 +59,9 @@ export default function TopArtists() {
                     {artistData &&
                     artistData?.map((artist, index) => {
                         return (
-                            <>
-                                <a href={artist.uri} key={artist.id}>
-                                    <li className="artist-item" key={artist.id}>
+                            <React.Fragment key={artist.id}>
+                                <a href={artist.uri}>
+                                    <li className="artist-item">
                                         <span className="artist-number">{index + 1}</span>
                                         <span className="artist-info">
                                             <span className="artist-flex">
@@ -96,7 +83,7 @@ export default function TopArtists() {
                                     </li>
                                 </a>
                                 <hr />
-                            </>
+                            </React.Fragment>
                         );
                     })}
                 </ol>
