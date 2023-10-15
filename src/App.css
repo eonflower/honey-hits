@@ -59,6 +59,7 @@ body {
     max-width: 800px;
     margin: auto;
     margin-top: 4rem;
+    padding-bottom: 8rem;
     padding: 1.5rem;
     border-radius: 30px;
     background-color: #ffffff;
@@ -83,6 +84,10 @@ body {
 
 .modal-footer, .modal-header, .modal-content {
     border: 0
+}
+
+.modal {
+    padding-bottom: 8rem;
 }
 
 
@@ -367,6 +372,10 @@ hr {
 }
 
 @media screen and (max-width: 420px) {
+    html {
+        overflow-y: auto;
+        margin-bottom: 200px;
+    }
     ol {
         padding: 0 .5rem;
     }

@@ -47,7 +47,7 @@ export default function Login(props) {
         show={show}
         onHide={handleShow}
         centered
-        style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
+        style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0,}}
         >
         <Modal.Body>
             <div className='app-info'>
