@@ -1,6 +1,6 @@
 import { useEffect, useContext, useState } from 'react';
 
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 
 import { StateContext} from './utils/StateProvider';
@@ -14,22 +14,17 @@ import TopSongs from './pages/TopSongs';
 
 function App() {
   
-  const { tokenEvents, access_token, refreshToken, expires_at } = useContext(StateContext);
+  const { tokenEvents, events, access_token, expires_at } = useContext(StateContext);
   const [token, setToken] = useState(null);
   const [time, setTime] = useState(null);
-  const location = useLocation();
   const oneMinuteLess = expires_at - 60000;
 
-  const checkTime = () => {
-      let latestTime = new Date().getTime();
-      setTime(latestTime);
-  };
-  
   useEffect(() => {
     Object.values(tokenEvents).forEach((item) => {
       window.addEventListener(item, () => {
         checkTime();
-        time > oneMinuteLess
+        time === null ? (setToken(null), <Navigate to="/login" />) 
+        : time > oneMinuteLess
           ? (refreshToken())
           : setToken(access_token);
         // console.log(
@@ -43,9 +38,9 @@ function App() {
 
   return (
     <div className="app">
-      {!token ? (location.pathname = "/login", <Login />) : (
+      {!token ? <Login /> : (
         <Routes>
-          <Route path="/liked" element={<LikedSongs />} />
+          <Route path="/" element={<LikedSongs />} />
           <Route path="/artists" element={<TopArtists />} />
           <Route path="/songs" element={<TopSongs />} />
           <Route path="/login" element={<Login />} />
