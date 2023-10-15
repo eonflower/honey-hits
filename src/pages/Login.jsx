@@ -27,6 +27,7 @@ export default function Login(props) {
         if (code) {
             // we have received the code from Spotify and will exchange it for an access_token
             exchangeForToken(code);
+            window.location.reload();
         }
     }, [handleClick]); // runs when handleClick is called
 
