@@ -50,16 +50,21 @@ export default function Login(props) {
         >
         <Modal.Body>
             <div className='app-info'>
-            <h2 className="info-q">What's Honey Hits?</h2>
-            <p className="info-a">Honey Hits is a Spotify-connected web app that allows you to see all your top favourite artists, songs, and most recently liked songs in one place. Think, Spotify wrapped, but all year long. With Honey Hits, you can easily track your music taste; all your latest, greatest, and sweetest jams! 
+            <h2 className="info-q">What's the Buzz with Honey Hits?</h2>
+            <p className="info-a">Honey Hits is your virtual beehive of musical wonders! 
+            It's a Spotify-connected web app that gathers your top favorite artists, songs, 
+            and the freshest jams you've just fallen in love with. Consider it your personal DJ bee! 🐝
             </p>
             <br />
-            <h2 className="info-q">Do I have to have a Spotify to use this?</h2>
-            <p className="info-a">Yes. This site was created using Spotify Web API. It requires you to login to utilize.</p>
+            <h2 className="info-q">Do I Need My Own Spotify Account?</h2>
+            <p className="info-a">Absolutely! To access Honey Hits, you'll need to login to a Spotify account. 
+            We're like your backstage pass to your personalized music paradise!</p>
             <br />
-            <h2 className="info-q">What about my personal information?</h2>
-            <p className="info-a">None of your information will be stored to any server or database. All of the information gathered is essentially just plugged in from your personalized Spotify data.</p>
-            <a className="login-link" onClick={handleClose}>close</a>
+            <h2 className="info-q">What About My Secret Music Garden?</h2>
+            <p className="info-a">Don't worry, we're not planting any trackers in your musical soil! 
+            Honey Hits does not have its own database, so none of your information gets stored anywhere except 
+            your own device. It's all your own sweet, sweet Spotify data! 🌷</p>
+            <a className="login-link" onClick={handleClose}>close the hive</a>
             </div>
         </Modal.Body>
         </Modal>
