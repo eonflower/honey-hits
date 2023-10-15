@@ -30,7 +30,7 @@ export default function Login(props) {
             exchangeForToken(code);
             
         }
-        <Navigate to='/liked' />
+        <Navigate to='/' />
     }, [handleClick]); // runs when handleClick is called
 
 
