@@ -372,7 +372,7 @@ hr {
 }
 
 @media screen and (max-width: 420px) {
-    html {
+    body {
         overflow-y: auto;
         margin-bottom: 200px;
     }

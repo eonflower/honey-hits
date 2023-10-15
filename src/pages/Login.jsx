@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { Navigate } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
 import logoBig from "../assets/honey-big.png";
 import login from "../components/backgrounds/login";
@@ -27,8 +28,9 @@ export default function Login(props) {
         if (code) {
             // we have received the code from Spotify and will exchange it for an access_token
             exchangeForToken(code);
-            window.location.reload();
+            
         }
+        <Navigate to='/liked' />
     }, [handleClick]); // runs when handleClick is called
 
 

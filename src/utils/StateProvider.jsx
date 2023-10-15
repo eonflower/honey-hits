@@ -74,9 +74,9 @@ const refreshToken = () => {
 // Function to add error handling to fetch requests
 async function addThrowErrorToFetch(response) {
     if (response.ok) {
-        return response.json();
+        return response.data();
     } else {
-        throw { response, error: await response.json() };
+        throw { response, error: await response.data() };
     }
 }
 
