@@ -24,16 +24,21 @@ function App() {
       let latestTime = new Date().getTime();
       setTime(latestTime);
   };
-
+  
   useEffect(() => {
-    if (location.pathname !== '/login') {
-      Object.values(tokenEvents).forEach((item) => {
-        window.addEventListener(item, () => {
-          checkTime();
-          time > oneMinuteLess ? refreshToken() : setToken(access_token);
-        });
+    Object.values(tokenEvents).forEach((item) => {
+      window.addEventListener(item, () => {
+        checkTime();
+        time > oneMinuteLess
+          ? (refreshToken())
+          : setToken(access_token);
+        // console.log(
+        //   "current time: " + time,
+        //   "expires at: " + expires_at,
+        //   "one minute less: " + oneMinuteLess
+        // );
       });
-    }
+    });
   }, [checkTime]);
 
   return (
