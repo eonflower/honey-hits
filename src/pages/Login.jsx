@@ -1,60 +1,42 @@
 import React, { useState, useContext, useEffect } from "react";
-import config from "../utils/config";
 import { Button, Modal } from "react-bootstrap";
 import logoBig from "../assets/honey-big.png";
+import login from "../components/backgrounds/login";
 import { StateContext } from "../utils/StateProvider";
-import generateRandomString from "../auth/randomString";
 
 
 export default function Login(props) {
-    const { redirectToSpotifyAuthorizeEndpoint, getUserAuth,  checkToken } = useContext(StateContext);
-    const [token, setToken] = useState();
+    const { redirectToSpotifyAuthorizeEndpoint, exchangeForToken, access_token } = useContext(StateContext);
+    const [code, setCode] = useState();
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
 
-    // useEffect(() => {
-    //     const fetchToken = async () => {
-    //         try {
-    //             const token = await checkToken();
-    //             setToken(token);
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
-    //     fetchToken();
-    // }, [token]);
-
-
-    const handleUserAuth = () => {
-        
-    }
-
-    const background =
-    "background-color:hsla(298,84%,82%,1);" +
-    "background-image:" +
-    "radial-gradient(at 40% 20%, hsla(28,100%,74%,1) 0px, transparent 50%)," +
-    "radial-gradient(at 80% 0%, hsla(45,100%,56%,1) 0px, transparent 50%)," +
-    "radial-gradient(at 0% 50%, hsla(264,100%,82%,1) 0px, transparent 50%)," +
-    "radial-gradient(at 80% 50%, hsla(340,100%,76%,1) 0px, transparent 50%)," +
-    "radial-gradient(at 0% 100%, hsla(18,100%,60%,1) 0px, transparent 50%)," +
-    "radial-gradient(at 80% 100%, hsla(254,96%,83%,1) 0px, transparent 50%)," +
-    "radial-gradient(at 0% 0%, hsla(343,100%,76%,1) 0px, transparent 50%);" +
-    "background-attachment: fixed;" +
-    "top: 0;" +
-    "right: 0;" +
-    "left: 0;" +
-    "bottom: 0;";
-
+    const background = login;
     document.body.style = background;
 
 
     const handleClick = () => {
-        redirectToSpotifyAuthorizeEndpoint()
-        // const state = generateRandomString(16);
-        // window.location.href = `${config.AUTH_URI}?client_id=${config.CLIENT_ID}&redirect_uri=${config.REDIRECT_URI}&scope=${config.AUTH_SCOPES.join(" ")}&response_type=code&state=${state}`;
-        // getUserAuth();
-    };
+        // Redirect to Spotify authorization
+        redirectToSpotifyAuthorizeEndpoint();
+        const args = new URLSearchParams(window.location.search);
+        const code = args.get('code');
+        if (code) {
+            // we have received the code from Spotify and will exchange it for an access_token
+            exchangeForToken(code);
+        }
+        // No else block here, as it might not be needed.
+    }
+
+    useEffect(() => {
+        const args = new URLSearchParams(window.location.search);
+        const code = args.get('code');
+        if (code) {
+            // we have received the code from Spotify and will exchange it for an access_token
+            exchangeForToken(code);
+        }
+    }, [code]); // Add 'code' as a dependency here
+
 
     return (
     <div className="login-wrapper">

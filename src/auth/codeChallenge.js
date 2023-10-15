@@ -1,5 +1,3 @@
-
-
 export async function generateCodeChallenge(codeVerifier) {
 	const digest = await crypto.subtle.digest(
 		'SHA-256',
