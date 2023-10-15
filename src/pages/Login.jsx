@@ -1,15 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import config from "../utils/config";
 import { Button, Modal } from "react-bootstrap";
 import logoBig from "../assets/honey-big.png";
-import config from "../utils/config";
+import { StateContext } from "../utils/StateProvider";
+import generateRandomString from "../auth/randomString";
+
 
 export default function Login(props) {
-  const [show, setShow] = useState(false);
+    const { redirectToSpotifyAuthorizeEndpoint, getUserAuth,  checkToken } = useContext(StateContext);
+    const [token, setToken] = useState();
+    const [show, setShow] = useState(false);
+    const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
 
-  const handleShow = () => setShow(true);
-  const handleClose = () => setShow(false);
+    // useEffect(() => {
+    //     const fetchToken = async () => {
+    //         try {
+    //             const token = await checkToken();
+    //             setToken(token);
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     };
+    //     fetchToken();
+    // }, [token]);
 
-  const background =
+
+    const handleUserAuth = () => {
+        
+    }
+
+    const background =
     "background-color:hsla(298,84%,82%,1);" +
     "background-image:" +
     "radial-gradient(at 40% 20%, hsla(28,100%,74%,1) 0px, transparent 50%)," +
@@ -27,11 +48,13 @@ export default function Login(props) {
 
     document.body.style = background;
 
+
     const handleClick = () => {
-    window.location.href = `${config.AUTH_URL}?client_id=${config.CLIENT_ID}&redirect_uri=${config.CALLBACK_URL}&scope=${config.AUTH_SCOPES.join(
-    " "
-    )}&response_type=token&show_dialog=true`;
-};
+        redirectToSpotifyAuthorizeEndpoint()
+        // const state = generateRandomString(16);
+        // window.location.href = `${config.AUTH_URI}?client_id=${config.CLIENT_ID}&redirect_uri=${config.REDIRECT_URI}&scope=${config.AUTH_SCOPES.join(" ")}&response_type=code&state=${state}`;
+        // getUserAuth();
+    };
 
     return (
     <div className="login-wrapper">
@@ -53,14 +76,14 @@ export default function Login(props) {
         <Modal.Body>
             <div className='app-info'>
             <h2 className="info-q">What's Honey Hits?</h2>
-            <p className="info-a">Honey Hits is a Spotify-connected web app that allows you to see all your top favorite artists, songs, and most recently liked songs in one place. With Honey Hits, you can easily track your music taste and discover new music based on your listening habits. All your latest, greatest, and sweetest jams!
+            <p className="info-a">Honey Hits is a Spotify-connected web app that allows you to see all your top favourite artists, songs, and most recently liked songs in one place. Think, Spotify wrapped, but all year long. With Honey Hits, you can easily track your music taste; all your latest, greatest, and sweetest jams! 
             </p>
             <br />
             <h2 className="info-q">Do I have to have a Spotify to use this?</h2>
             <p className="info-a">Yes. This site was created using Spotify Web API. It requires you to login to utilize.</p>
             <br />
             <h2 className="info-q">What about my personal information?</h2>
-            <p className="info-a">None of your information will be stored to any server. All of the information gathered is essentially just plugged in from your personalized Spotify data.</p>
+            <p className="info-a">None of your information will be stored to any server or database. All of the information gathered is essentially just plugged in from your personalized Spotify data.</p>
             <a className="login-link" onClick={handleClose}>close</a>
             </div>
         </Modal.Body>

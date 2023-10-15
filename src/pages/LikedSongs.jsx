@@ -1,53 +1,40 @@
-import axios from "axios";
 import _ from "lodash";
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Nav from "../components/Nav";
 import Header from "../components/Header";
-import config from "../utils/config";
-import { useStateProvider } from "../utils/StateProvider";
-import { reducerCases } from "../utils/Constants";
+import { StateContext } from "../utils/StateProvider";
 import pink from "../assets/pink.svg"
+import body from "../components/backgrounds/body"
 import msToMin from "../components/msToMin";
 
 
 export default function LikedSongs() {
-    const background = 
-        `background-image: radial-gradient(circle at top, white, rgb(222, 222, 222));
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        margin: 0;`
+    const { getLikedData } = useContext(StateContext);
+    const [token, setToken] = useState();
+    const [likedData, setLikedData] = useState();
 
-        document.body.style = background
+    const background = body
+    document.body.style = background
 
-    const [{ token, likedListItem }, dispatch] = useStateProvider();
-    const [data, setData] = useState()
-
-    useEffect(() => {
-        const getLikedData = async () => {
+    // useEffect(() => {
+    //     const fetchLikedData = async () => {
+    //         try {
+    //             const token = await checkToken();
+    //             setToken(token);
+    //             const likedData = await getLikedData(token);
+    //             setLikedData(likedData);
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     };
+    //     fetchLikedData();
+    // }, []);
         
-            const response = await axios.get(`${config.API_URL}/me/tracks?limit=50&offset=0`, {
-                headers: {
-                    Authorization:`Bearer ${token}`,
-                    "Content-Type": 'application/json',
-                },
-            }); 
-
-            const {items} = response.data;
-            
-            const liked = items.map(({track, duration_ms, uri, name, id, artists, album}) => {
-                return {track, duration_ms, uri, name, id, artists, album};
-            })
-            
-
-            
-            // console.log(items)
-            setData(liked)
-            console.log(items)
-
-            dispatch({type: reducerCases.SET_TOP_LIKED, likedListItem})
-        }
-        getLikedData();
-    }, [token])
+        // useEffect(() => {
+        //     // Assuming you have a way to retrieve the token, set it here
+        //     // For example, you might have a function like setToken(getTokenFromLocalStorage())
+        //     // Make sure to implement getTokenFromLocalStorage() to get the token from where you store it
+        // }, []);
 
 
     return(
@@ -59,8 +46,8 @@ export default function LikedSongs() {
                 title="recently liked songs"
                 />
                 <ol className="liked-list">
-                {data && 
-                data.map((liked, index) => {
+                {likedData && 
+                likedData?.map((liked, index) => {
                     return <>
                     <a href={liked.track.uri}  key={liked.track.id}>
                     <li className="liked-item" key={liked.track.id}>

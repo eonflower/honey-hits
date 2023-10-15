@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
+  import { useEffect, useState, useContext } from 'react';
+
 import { Route, Routes, Navigate } from 'react-router-dom';
+import axios from 'axios';
 import './App.css';
 
 import config from "./utils/config"
-import { useStateProvider } from './utils/StateProvider';
+import { StateContext} from './utils/StateProvider';
 import { reducerCases } from './utils/Constants';
-import _ from 'lodash';
+import _, { get, set } from 'lodash';
 
 import Login from './pages/Login';
 import LikedSongs from './pages/LikedSongs';
@@ -15,31 +17,65 @@ import TopSongs from './pages/TopSongs';
 
 
 
+
+
 function App() {
-  const [{ token }, dispatch] = useStateProvider();
+  const { getAccessToken, getUserData, access_token, refresh_token, expires_at } = useContext(StateContext);
+    // Restore tokens from localStorage
+
+  const [token, setToken] = useState();
 
   useEffect(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      const token = hash.split("=")[1];
-      window.localStorage.setItem("token", token);
-      dispatch({ type: reducerCases.SET_TOKEN, token });
-      window.location.hash = '';
+    const args = new URLSearchParams(window.location.search);
+    const code = args.get('code');
+    if (code) {
+      // we have received the code from spotify and will exchange it for a access_token
+      getAccessToken(code);
+    } else if (access_token && refresh_token && expires_at) {
+      // we are already authorized and reload our tokens from localStorage
+      getUserData();
+      setToken(access_token);
     } else {
-      const token = window.localStorage.getItem("token");
-      if (token) {
-        dispatch({ type: reducerCases.SET_TOKEN, token });
-      } else {
-        <Navigate to="/login" />
-      }
+    <Navigate to='/login' />
     }
+}, [access_token]);
 
 
-  }, [dispatch]);
 
-
+// useEffect(() => {
+//   const getUserAuth = () => {
+//     const hash = window.location.hash;
+//     if (hash) {
+//         const token = hash.split("=")[1];
+//         window.localStorage.setItem("access_token", token);
+//         setToken(token);
+        
+//         axios.get('/api/auth/callback', {
+//         headers: {
+//             'content-type': 'application/x-www-form-urlencoded',
+//             Authorization: `Bearer ${token}`},
+//                 client_id: config.CLIENT_ID,
+//                 access_token: token,
+    
+//             })
+//     } else {
+//         <Navigate to="/login" />;
+//     }
+// }
+// getUserAuth();
+// }, [token]);
 
   return (
+  //   <div className="app">
+  //     <Routes>
+  //       <Route path="/" element={<LikedSongs />} />
+  //       <Route path="/artists" element={<TopArtists />} />
+  //       <Route path="/songs" element={<TopSongs />} />
+  //       <Route path="/login" element={<Login />} />
+  //     </Routes>
+  // </div>
+
+  
     <div className="app">
       {!token ? <Login /> : (
         <Routes>
@@ -54,4 +90,3 @@ function App() {
 }
 
 export default App;
-

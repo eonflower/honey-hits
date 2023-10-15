@@ -1,65 +1,31 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import config from "../utils/config";
+import React, { useEffect, useState, useContext } from "react";
 import Nav from "../components/Nav";
 import Header from "../components/Header";
 import yellow from "../assets/yellow.svg";
-import { useStateProvider } from "../utils/StateProvider";
-import { reducerCases } from "../utils/Constants";
+import body from "../components/backgrounds/body"
+import { StateContext } from "../utils/StateProvider";
 import TimeFrame from "../components/TimeFrame";
 
-// function TimeFrame({ value, onChange }) {
-//     return (
-//         <div>
-//         <button onClick={() => onChange("short_term")} disabled={value === "short_term"}>
-//             last 30 days
-//         </button>
-//         <button onClick={() => onChange("medium_term")} disabled={value === "medium_term"}>
-//             last 6 months
-//         </button>
-//         <button onClick={() => onChange("long_term")} disabled={value === "long_term"}>
-//             of all time
-//         </button>
-//         </div>
-//     );
-// }
-
 export default function TopArtists() {
-    const [{ token, artistListItem }, dispatch] = useStateProvider();
-    const [data, setData] = useState();
+    // const { getArtistData } = useContext(StateContext);
+    const [artistData, setArtistData] = useState();
     const [timeFrame, setTimeFrame] = useState("short_term");
-    const background = `background-image: radial-gradient(circle at top, white, rgb(222, 222, 222));
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        margin: 0;`;
-
+    const background = body;
     document.body.style = background;
 
-    useEffect(() => {
-        const getArtistData = async () => {
-        const response = await axios.get(
-            `${config.API_URL}/me/top/artists?time_range=${timeFrame}&limit=50&offset=0`,
-            {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            }
-        );
+    // useEffect(() => {
+    //     const fetchArtistData = async () => {
+    //     try {
+    //         const token = await checkToken(); // Check if token is available
+    //         const artists = await getArtistData(token, timeFrame); // Fetch artist data
+    //         setArtistData(artists);
+    //     } catch (error) {
+    //         console.error('Error fetching artist data:', error);
+    //     }
+    //     }
 
-        const { items } = response.data;
-
-        const artists = items.map(({ name, uri, id, genres, images }) => {
-        return { name, uri, id, genres, images };
-        });
-
-        setData(artists);
-
-        dispatch({ type: reducerCases.SET_TOP_ARTISTS, artistListItem });
-    };
-
-    getArtistData();
-    }, [token, timeFrame]);
+    //     fetchArtistData();
+    // }, [timeFrame]);
 
     return (
     <div className="topArtists-wrapper">
@@ -68,8 +34,8 @@ export default function TopArtists() {
         <Header headerImg={yellow} title="top artists" />
         <TimeFrame value={timeFrame} onChange={setTimeFrame} />
         <ol>
-            {data &&
-            data.map((artist, index) => {
+            {artistData &&
+            artistData?.map((artist, index) => {
                 return (
                 <>
                     <a href={artist.uri} key={artist.id}>
