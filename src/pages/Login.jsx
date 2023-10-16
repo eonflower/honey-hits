@@ -39,8 +39,11 @@ export default function Login(props) {
             exchangeForToken(code);
             
         }
-        <Navigate to='/' />
     }, [handleClick]); // runs when handleClick is called
+
+    useEffect(() => {
+        <Navigate to='/' />
+    }, [])
 
 
     return (
