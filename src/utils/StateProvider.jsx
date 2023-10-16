@@ -12,6 +12,7 @@ export const StateContext = createContext();
 let access_token = localStorage.getItem('access_token') || null;
 let refresh_token = localStorage.getItem('refresh_token') || null;
 let expires_at = localStorage.getItem('expires_at') || null;
+const code_verifier = localStorage.getItem('code_verifier') || null;
 let code = new URLSearchParams(window.location.search).get('code');
 const currentTime = new Date().getTime(); // Current time in seconds
 
@@ -26,7 +27,6 @@ const tokenEvents = [
 
 // Function to get access token from Spotify in exchange for the code
 const exchangeForToken = () => {
-    const code_verifier = localStorage.getItem('code_verifier');
 
     axios.post('https://accounts.spotify.com/api/token', 
         new URLSearchParams({
@@ -41,44 +41,41 @@ const exchangeForToken = () => {
             }
         }
     )
-    .then((response) => {
-        return response.data;
-    })
+    .then(response => response.data)
     .then((data) => {
         processTokenResponse(data);
         window.history.replaceState({}, document.title, '/');
     })
-    .catch(addThrowErrorToFetch);
+    .catch(error => {
+        throw new Error(`Error exchanging token: ${error.message}`);
+    });
 }
 
-// Function to get refresh token from Spotify
-const refreshToken = () => {
-    axios.post('https://accounts.spotify.com/api/token',
-        new URLSearchParams({
-            client_id: config.CLIENT_ID,
-            grant_type: 'refresh_token',
-            refresh_token,
-        }), {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-            }
-        }
-    )
-    .then((response) => {
-        return response.data;
-    })
-    .then(processTokenResponse)
-    .catch(addThrowErrorToFetch);
-}
+// TODO: Fix refresh token function
 
-// Function to add error handling to fetch requests
-async function addThrowErrorToFetch(response) {
-    if (response.ok) {
-        return response.data();
-    } else {
-        throw { response, error: await response.data() };
-    }
-}
+// // Function to get refresh token from Spotify
+// const refreshToken = (refreshToken) => {
+
+//     axios.post('https://accounts.spotify.com/api/token',
+//         {body: {
+//             grant_type: 'refresh_token',
+//             refresh_token: refreshToken,
+//             client_id: config.CLIENT_ID,
+//         }}, {
+//             headers: {
+//             'Content-Type': 'application/x-www-form-urlencoded',
+//             },
+//         })
+//         .then(response => response.data)
+//         .then((data) => {
+//             processTokenResponse(data);
+//             window.history.replaceState({}, document.title, '/');
+//         })
+//         .catch(error => {
+//             throw new Error(`Error refreshing token: ${error.message}`);
+//         });
+//     }
+
 
 // Function to redirect to Spotify's authorization endpoint
 const redirectToSpotifyAuthorizeEndpoint = () => {
@@ -117,7 +114,7 @@ const processTokenResponse = (data) => {
     localStorage.setItem('expires_at', expires_at);
 
     // load data of logged in user
-    getUserData();
+    getUserData(access_token);
     window.location.href = '/';
     <Navigate to='/' />
 }
@@ -151,7 +148,7 @@ const getUserAuth = () => {
 //  User Data Functions //
 
 // Function to get user data from Spotify
-const getUserData = () => {
+const getUserData = (access_token) => {
     axios.get('https://api.spotify.com/v1/me', {
         headers: {
             Authorization: 'Bearer ' + access_token,
@@ -187,7 +184,7 @@ export const StateProvider = ({children}) => (
         getUserAuth,
         redirectToSpotifyAuthorizeEndpoint,
         exchangeForToken,
-        refreshToken,
+        // refreshToken,
         getUserData,
         access_token,
         refresh_token,

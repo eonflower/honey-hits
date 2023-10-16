@@ -1,7 +1,7 @@
 import { useEffect, useContext, useState } from 'react';
 
 import { Route, Routes, Navigate } from 'react-router-dom';
-import './App.css';
+
 
 import { StateContext} from './utils/StateProvider';
 import _ from 'lodash';
@@ -14,33 +14,25 @@ import TopSongs from './pages/TopSongs';
 
 function App() {
   
-  const { tokenEvents, events, access_token, currentTime, expires_at,  } = useContext(StateContext);
+  const { tokenEvents, access_token, expires_at, logout } = useContext(StateContext);
   const [token, setToken] = useState(null);
-  const [time, setTime] = useState(null);
+  // const [time, setTime] = useState(null);
   const oneMinuteLess = expires_at - 60000;
 
   const checkTime = () => {
-      let latestTime = new Date().getTime();
-      setTime(latestTime);
+    return new Date().getTime() > oneMinuteLess;
   };
 
 
- useEffect(() => {
-  Object.values(tokenEvents).forEach((item) => {
+useEffect(() => {
+
+  tokenEvents.forEach(item => {
     window.addEventListener(item, () => {
-      checkTime();
-      time > oneMinuteLess
-        ? (setToken(null), <Navigate to="/login" />)
-        : setToken(access_token);
-      // console.log(
-      //   "current time: " + time,
-      //   "expires at: " + expires_at,
-      //   "one minute less: " + oneMinuteLess
-      // );
-      // console.log(item + ' event fired!');
+      token && checkTime() ? logout()
+      : setToken(access_token);
     });
   });
-}, [checkTime]);
+}, []); // Empty dependency array ensures this effect only runs once
 
   return (
     <div className="app">

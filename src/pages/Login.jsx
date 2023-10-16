@@ -17,7 +17,16 @@ export default function Login(props) {
 
 
     const handleClick = () => {
-        // Redirect to Spotify authorization
+        // Check if we have received the code from Spotify
+        const args = new URLSearchParams(window.location.search);
+        const code = args.get('code');
+        if (code) {
+            // we have received the code from Spotify and will exchange it for an access_token
+            exchangeForToken(code);
+            
+        }
+
+         // Redirect to Spotify authorization
         redirectToSpotifyAuthorizeEndpoint();
     }
 

@@ -17,8 +17,8 @@ const config = {
     ],
     // REDIRECT_URI: "http://localhost:5173/",
     
-    REDIRECT_URI:"https://honeyhits.club/",
-    REDIRECT_LOGIN:"https://honeyhits.club/login",
+    REDIRECT_URI:"https://honeyhits.club",
+    
     
 };
 
