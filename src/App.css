@@ -4,6 +4,8 @@
 
 
 body {
+    overflow-y: auto;
+    padding-bottom: 200px;
     background-image: radial-gradient(circle at top, white, rgb(222, 222, 222));
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -372,10 +374,7 @@ hr {
 }
 
 @media screen and (max-width: 420px) {
-    body {
-        overflow-y: auto;
-        margin-bottom: 200px;
-    }
+    
     ol {
         padding: 0 .5rem;
     }
