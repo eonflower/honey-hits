@@ -41,7 +41,7 @@ useEffect(() => {
           <Route path="/" element={<LikedSongs />} />
           <Route path="/artists" element={<TopArtists />} />
           <Route path="/songs" element={<TopSongs />} />
-          3<Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       )}
     </div>
