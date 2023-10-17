@@ -16,12 +16,10 @@ import {
 } from "./utils/actions"; // Import action creators
 
 function App() {
-  const [{ accessToken, refreshToken, expiresAt, isLoggedIn }, dispatch] = useStateProvider();
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [{ accessToken }, dispatch] = useStateProvider();
   const access_token = localStorage.getItem('access_token');
   const expires_at = localStorage.getItem('expires_at');
-  const isLoggedInStorage = localStorage.getItem('isLoggedIn');
-  const tokenEvents = ['load', 'click', 'mousedown', 'keypress'];
+  const tokenEvents = ['load', 'click', 'mousedown', 'mouseup', 'keypress', 'touchstart', 'touchmove'];
   const oneMinuteLess = expires_at - 60000;
 
   const logout = () => {
