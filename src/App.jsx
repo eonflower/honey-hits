@@ -19,7 +19,7 @@ function App() {
   const [{ accessToken }, dispatch] = useStateProvider();
   const access_token = localStorage.getItem('access_token');
   const expires_at = localStorage.getItem('expires_at');
-  const tokenEvents = ['load', 'click', 'mousedown', 'mouseup', 'keypress', 'touchstart', 'touchmove'];
+  const tokenEvents = ['load', 'click', 'mousedown', 'keypress', 'touchmove', 'touchstart', 'scroll' ];
   const oneMinuteLess = expires_at - 60000;
 
   const logout = () => {
@@ -42,7 +42,7 @@ useEffect(() => {
   }
   tokenEvents.forEach(item => {
     window.addEventListener(item, () => {
-      if (checkTime()) {
+      if (access_token && checkTime()) {
         logout();
       }
     });

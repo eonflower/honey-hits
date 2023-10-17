@@ -47,7 +47,7 @@ export const setSongData = (dispatch, topSongs) => {
 
 export const setIsLoggedIn = (dispatch, isLoggedIn) => {
   dispatch({ type: IS_LOGGED_IN, isLoggedIn: isLoggedIn });
-  console.log("setIsLoggedIn", isLoggedIn);
+  // console.log("setIsLoggedIn", isLoggedIn);
 };
 
 export const setUserData = (dispatch, userData) => {
