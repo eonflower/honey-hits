@@ -1,4 +1,4 @@
-export async function generateCodeChallenge(codeVerifier) {
+export const generateCodeChallenge = async (codeVerifier) => {
 	const digest = await crypto.subtle.digest(
 		'SHA-256',
 		new TextEncoder().encode(codeVerifier));

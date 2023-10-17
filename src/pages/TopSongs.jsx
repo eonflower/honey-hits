@@ -1,6 +1,5 @@
-import React, {useEffect, useState, useContext} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
-import { StateContext } from "../utils/StateProvider";
 import config from "../utils/config";
 import _ from "lodash";
 import Nav from "../components/Nav";
@@ -9,15 +8,14 @@ import peach from "../assets/peach.svg"
 import body from "../components/backgrounds/body"
 import TimeFrame from "../components/TimeFrame";
 import msToMin from "../components/msToMin";
+import { useStateProvider } from "../utils/StateProvider";
+import { setSongData } from "../utils/actions";
 
 
 
 export default function TopSongs() {
-    const { isAccessTokenExpired, access_token } = useContext(StateContext);
-
-    
-    // Define states for songData and timeFrame
-    const [songData, setSongData] = useState();
+    const [{ accessToken, isLoggedIn, topSongs }, dispatch] = useStateProvider();
+    // Define states for timeFrame
     const [timeFrame, setTimeFrame] = useState("short_term");
 
     // Set the background for the body
@@ -32,24 +30,24 @@ export default function TopSongs() {
                 `${config.API_URI}/me/top/tracks?time_range=${timeFrame}&limit=50&offset=0`,
                 {
                     headers: {
-                        Authorization: `Bearer ${access_token}`,
+                        Authorization: `Bearer ${accessToken}`,
                         "Content-Type": "application/json",
                     },
                 })
                 .then(response => {
                     const { items } = response.data;
-                    setSongData(items);
-                    return items.map(({ name, duration_ms, uri, id, artists, album }) => {
+                    // dispatch(setSongData(items));
+                    const songData = items.map(({ name, duration_ms, uri, id, artists, album }) => {
                         return { name, duration_ms, uri, id, artists, album };
                     });
+                    setSongData(dispatch, songData);
                 });
-            return () => clearInterval(tokenCheckInterval);
         }
 
         // Call the fetchSongData function
         fetchSongData();
 
-    }, [timeFrame]);
+    }, [timeFrame, isLoggedIn]);
 
         
         
@@ -63,7 +61,7 @@ export default function TopSongs() {
                 />
                 <TimeFrame value={timeFrame} onChange={setTimeFrame} />
                 <ol>
-                {songData && songData?.map((song, index) => {
+                {topSongs && topSongs?.map((song, index) => {
                 
                     return (
                         <React.Fragment key={song.id}>

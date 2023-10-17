@@ -8,4 +8,3 @@ export const generateRandomString = (length) => {
 	return text;
 };
 
-export default generateRandomString;

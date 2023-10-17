@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export default function TimeFrame({ value, onChange }) {
     return (
@@ -15,3 +16,8 @@ export default function TimeFrame({ value, onChange }) {
         </div>
     );
 }
+
+TimeFrame.propTypes = {
+    value: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired
+};

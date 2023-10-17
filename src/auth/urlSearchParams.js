@@ -5,4 +5,3 @@ export const generateUrlWithSearchParams = (url, params) => {
 	return urlObject.toString();
 }
 
-export default generateUrlWithSearchParams;

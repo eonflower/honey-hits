@@ -3,16 +3,16 @@ import Nav from "../components/Nav";
 import Header from "../components/Header";
 import yellow from "../assets/yellow.svg";
 import body from "../components/backgrounds/body"
-import { StateContext } from "../utils/StateProvider";
 import TimeFrame from "../components/TimeFrame";
 import axios from "axios";
 import config from "../utils/config";
+import { useStateProvider } from "../utils/StateProvider";
+import { setArtistData } from "../utils/actions";
 
 export default function TopArtists() {
-    const { isAccessTokenExpired, access_token, refreshToken } = useContext(StateContext);
+    const [{ accessToken, isLoggedIn, topArtists }, dispatch] = useStateProvider();
 
-    // Define states for artistData and timeFrame
-    const [artistData, setArtistData] = useState();
+    // Define states for timeFrame
     const [timeFrame, setTimeFrame] = useState("short_term");
 
     // Set the background for the body
@@ -27,26 +27,26 @@ export default function TopArtists() {
                 `${config.API_URI}/me/top/artists?time_range=${timeFrame}&limit=50&offset=0`,
                 {
                     headers: {
-                        Authorization: `Bearer ${access_token}`,
+                        Authorization: `Bearer ${accessToken}`,
                         "Content-Type": "application/json",
                     },
                 }
             )
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 const { items } = response.data;
-                setArtistData(items);
-                return items.map(({ name, uri, id, genres, images }) => {
+                // dispatch(setArtistData(items)); // Dispatch the action to set artist data in Redux store
+                const artistData = items.map(({ name, uri, id, genres, images }) => {
                     return { name, uri, id, genres, images };
                 });
+                setArtistData(dispatch, artistData);
             });
-            return () => clearInterval(tokenCheckInterval);
+            
         }
-
         // Call the fetchArtistData function
         fetchArtistData();
 
-    }, [timeFrame]);
+    }, [timeFrame, isLoggedIn]);
 
 
     return (
@@ -56,8 +56,8 @@ export default function TopArtists() {
                 <Header headerImg={yellow} title="top artists" />
                 <TimeFrame value={timeFrame} onChange={setTimeFrame} />
                 <ol>
-                    {artistData &&
-                    artistData?.map((artist, index) => {
+                    {topArtists &&
+                    topArtists?.map((artist, index) => {
                         return (
                             <React.Fragment key={artist.id}>
                                 <a href={artist.uri}>

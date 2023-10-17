@@ -1,13 +1,37 @@
-import React, { useState, useContext, useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import {
+    setAccessToken,
+    setRefreshToken,
+    setExpiresAt,
+    setIsLoggedIn,
+    setUserData,
+  } from "../utils/actions"; // Import action creators
+import { useStateProvider } from "../utils/StateProvider";
+import axios from "axios";
+import config from "../utils/config";
+import { useNavigate } from 'react-router-dom';
 import { Button, Modal } from "react-bootstrap";
 import logoBig from "../assets/honey-big.png";
 import login from "../components/backgrounds/login";
-import { StateContext } from "../utils/StateProvider";
+
+
+import {generateCodeChallenge} from '../auth/codeChallenge';
+import {generateRandomString} from '../auth/randomString';
+import {generateUrlWithSearchParams} from '../auth/urlSearchParams';
+
 
 
 export default function Login(props) {
-    const { redirectToSpotifyAuthorizeEndpoint, exchangeForToken, access_token } = useContext(StateContext);
+    const [{ accessToken, refreshToken, expiresAt, isLoggedIn, userData }, dispatch] = useStateProvider();
+    const code_verifier = localStorage.getItem('code_verifier') || null;
+    const access_token = localStorage.getItem('access_token') || null;
+    const refresh_token = localStorage.getItem('refresh_token') || null;
+    const expires_at = localStorage.getItem('expires_at') || null;
+
+    let code = new URLSearchParams(window.location.search).get('code');
+    
+    const navigate = useNavigate();
+    
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
@@ -15,36 +39,112 @@ export default function Login(props) {
     const background = login;
     document.body.style = background;
 
+    const getUserData = (accessToken) => {
+        console.log(accessToken)
+        axios.get('https://api.spotify.com/v1/me', {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+            })
+            .then(response => response.data)
+            .then((data) => {
+                // console.log(data)
+                setAccessToken(dispatch, access_token);
+                setUserData(dispatch, data);
 
-    const handleClick = () => {
-        // Check if we have received the code from Spotify
-        const args = new URLSearchParams(window.location.search);
-        const code = args.get('code');
-        if (code) {
-            // we have received the code from Spotify and will exchange it for an access_token
-            exchangeForToken(code);
-            
-        }
+                // localStorage.setItem('isLoggedIn', true);
+            })
+            .catch(error => {
+                throw new Error(`Error fetching user data: ${error.message}`);
+            });
+    };
 
-         // Redirect to Spotify authorization
-        redirectToSpotifyAuthorizeEndpoint();
+    const redirectToSpotifyAuthorizeEndpoint = () => {
+    const codeVerifier = generateRandomString(64);
+    
+    generateCodeChallenge(codeVerifier).then((code_challenge) => {
+        
+        let scope = config.AUTH_SCOPES.join(" ");
+        window.localStorage.setItem('code_verifier', codeVerifier);
+    
+        window.location.href = generateUrlWithSearchParams(
+        'https://accounts.spotify.com/authorize',
+        {
+            response_type: 'code',
+            client_id: config.CLIENT_ID,
+            scope,
+            code_challenge_method: 'S256',
+            code_challenge,
+            redirect_uri: config.REDIRECT_URI,
+        },
+        );
+    });
+    }
+    
+    const processTokenResponse = (data) => {
+        console.log(data)
+        const access_token = data.access_token;
+        const refresh_token = data.refresh_token;
+        
+        const t = new Date();
+        const expires_at = t.setSeconds(t.getSeconds() + data.expires_in);
+        
+        localStorage.setItem('access_token', access_token);
+        localStorage.setItem('refresh_token', refresh_token);
+        localStorage.setItem('expires_at', expires_at);
+        
+        setAccessToken(dispatch, access_token);
+        setRefreshToken(dispatch, refresh_token);
+        setExpiresAt(dispatch, expires_at);
+        setUserData(dispatch, data);
+
+        getUserData(userData);
+        window.location.href = '/';
+    
+
     }
 
-    useEffect(() => {
-        // Check if we have received the code from Spotify
-        const args = new URLSearchParams(window.location.search);
-        const code = args.get('code');
-        if (code) {
-            // we have received the code from Spotify and will exchange it for an access_token
-            exchangeForToken(code);
+    const exchangeForToken = (codeVerifier) => {
+        let codeInUrl = new URLSearchParams(window.location.search).get('code');
+        axios.post('https://accounts.spotify.com/api/token', 
+            new URLSearchParams({
+                client_id: config.CLIENT_ID,
+                grant_type: 'authorization_code',
+                code: codeInUrl,
+                redirect_uri: config.REDIRECT_URI,
+                code_verifier: codeVerifier,
+            }), {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                }
+            }
+        )
+        .then(response => response.data)
+        .then((data) => {
+            console.log(data)
+            processTokenResponse(data);
+            window.location.href = '/';
+        })
+        // .catch(error => {
+        //     throw new Error(`Error exchanging token: ${error.message}`);
+        // });
+    }
+
+    const handleClick = () => {
+        redirectToSpotifyAuthorizeEndpoint();
             
-        }
-    }, [handleClick]); // runs when handleClick is called
+    }
+
 
     useEffect(() => {
-        <Navigate to='/' />
-    }, [])
-
+        if (code_verifier) {
+            exchangeForToken(code_verifier);
+            if (accessToken) {
+                getUserData(accessToken);
+            }
+        }
+    }, [handleClick]);
 
     return (
     <div className="login-wrapper">

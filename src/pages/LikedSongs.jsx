@@ -4,46 +4,41 @@ import axios from "axios";
 import config from "../utils/config";
 import Nav from "../components/Nav";
 import Header from "../components/Header";
-import { StateContext } from "../utils/StateProvider";
 import pink from "../assets/pink.svg"
 import body from "../components/backgrounds/body"
 import msToMin from "../components/msToMin";
+import { useStateProvider } from "../utils/StateProvider";
+import { setLikedData } from "../utils/actions";
 
 
 export default function LikedSongs() {
-    const { access_token } = useContext(StateContext);
-
-    // Define state for likedData
-    const [likedData, setLikedData] = useState();
+    const [{ isLoggedIn, accessToken, recentlyLiked }, dispatch] = useStateProvider();
 
     // Set the background for the body
     const background = body
     document.body.style = background
 
-    // UseEffect to fetch liked data and set an interval to check token expiration
+
     useEffect(() => {
-        // Function to fetch liked data
-        const fetchLikedData = async () => {
-            axios.get(`${config.API_URI}/me/tracks?limit=50&offset=0`, {
+        const getLikedData = async () => {
+        
+            const response = await axios.get(`${config.API_URI}/me/tracks?limit=50&offset=0`, {
                 headers: {
-                    Authorization:`Bearer ${access_token}`,
+                    Authorization:`Bearer ${accessToken}`,
                     "Content-Type": 'application/json',
                 },
+            }); 
+            const {items} = response.data;
+            const liked = items.map(({track, duration_ms, uri, name, id, artists, album}) => {
+                return {track, duration_ms, uri, name, id, artists, album};
             })
-            .then(response => {
-                console.log(response);
-                const {items} = response.data;
-                setLikedData(items);
-            
-                return items.map(({track, duration_ms, uri, name, id, artists, album}) => {
-                    return {track, duration_ms, uri, name, id, artists, album};
-                });
-            });
-        }
 
-        // Call the fetchLikedData function
-        fetchLikedData();
-    }, []);
+            setLikedData(dispatch, liked)
+            // console.log(items)
+
+        }
+        getLikedData();
+    }, [isLoggedIn, dispatch])
 
     return (
         <div className="likedSongs">
@@ -54,8 +49,8 @@ export default function LikedSongs() {
                     title="recently liked songs"
                 />
                 <ol className="liked-list">
-                    {likedData && 
-                        likedData?.map((liked, index) => {
+                    {recentlyLiked && 
+                        recentlyLiked?.map((liked, index) => {
                             return (
                                 <React.Fragment key={liked.track.id}>
                                     <a href={liked.track.uri}>

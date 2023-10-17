@@ -15,9 +15,9 @@ const config = {
         'playlist-modify-public',
         'user-library-read',
     ],
-    // REDIRECT_URI: "http://localhost:5173/",
+    // REDIRECT_URI: "http://localhost:5173/", // for local dev
     
-    REDIRECT_URI:"https://honeyhits.club",
+    REDIRECT_URI:"https://honeyhits.club", // for prod
     
     
 };
