@@ -44,7 +44,7 @@ useEffect(() => {
   }
   tokenEvents.forEach(item => {
     window.addEventListener(item, () => {
-      if (isLoggedIn && checkTime()) {
+      if (checkTime()) {
         logout();
       }
     });
